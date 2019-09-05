@@ -6,13 +6,10 @@
         android:icon="@drawable/new_feed"
         android:title="@string/title_home" />
 
-
-
     <item
         android:id="@+id/navigation_friends"
         android:icon="@drawable/friends_light"
         android:title="@string/friends" />
-
 
     <item
         android:id="@+id/navigation_notifications"

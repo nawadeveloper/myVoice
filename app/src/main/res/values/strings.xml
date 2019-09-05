@@ -5,4 +5,10 @@
     <string name="title_notifications">Notifications</string>
     <string name="profile">profile</string>
     <string name="friends">friends</string>
+    <string name="voice">VOICE</string>
+    <string name="create_new_account">Create New Account</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="re_enter_password">Re Enter Password</string>
+    <string name="register">Register</string>
 </resources>
