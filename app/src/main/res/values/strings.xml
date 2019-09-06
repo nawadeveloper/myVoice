@@ -11,4 +11,7 @@
     <string name="password">Password</string>
     <string name="re_enter_password">Re Enter Password</string>
     <string name="register">Register</string>
+    <string name="already_has_an_account_n_sign_in">Already has an account? \n sign in</string>
+    <string name="sign_in">Sign In</string>
+    <string name="do_not_has_account_sign_in">Do not has account?\n Sign In</string>
 </resources>
