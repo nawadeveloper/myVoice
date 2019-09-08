@@ -19,4 +19,6 @@
     <string name="status">Status</string>
     <string name="record">RECORD</string>
     <string name="sign_out">SIGN OUT</string>
+    <string name="message">message</string>
+    <string name="logging">Logging...</string>
 </resources>

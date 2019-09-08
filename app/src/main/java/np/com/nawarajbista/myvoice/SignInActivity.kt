@@ -1,16 +1,20 @@
 package np.com.nawarajbista.myvoice
 
+import android.app.AlertDialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.widget.TextView
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_sign_in.*
+import kotlinx.android.synthetic.main.alert_dialog.*
 
 class SignInActivity : AppCompatActivity() {
 
     lateinit var auth: FirebaseAuth
+    lateinit var dialog: AlertDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,17 +44,38 @@ class SignInActivity : AppCompatActivity() {
             return
         }
 
+        loading()
 
         auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener {
 
-                if(!it.isSuccessful) return@addOnCompleteListener
+                if(!it.isSuccessful) {
+                    dialog.dismiss()
+                    return@addOnCompleteListener
+                }
                 val intent = Intent(this, MainActivity::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
                 startActivity(intent)
             }
             .addOnFailureListener {
+                //dialog.dismiss()
                 Toast.makeText(this, "${it.message}", Toast.LENGTH_SHORT).show()
             }
+    }
+
+
+
+    private fun loading() {
+        val builder = AlertDialog.Builder(this)
+        val dialogView = layoutInflater.inflate(R.layout.alert_dialog,null)
+        val message =dialogView.findViewById<TextView>(R.id.dialog_message)
+        message.text = getText(R.string.logging)
+        builder.setView(dialogView)
+        builder.setCancelable(false)
+        dialog = builder.create()
+
+        dialog.show()
+
+
     }
 }
