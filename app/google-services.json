@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "751949838675",
+    "firebase_url": "https://my-voice-prototype.firebaseio.com",
+    "project_id": "my-voice-prototype",
+    "storage_bucket": "my-voice-prototype.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:751949838675:android:e6489f08aedb76a197c9a6",
+        "android_client_info": {
+          "package_name": "np.com.nawarajbista.myvoice"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "751949838675-ajufjvafc4qk0l95jjhidi9djtiid23o.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB0XvgGf3-TexzogY0B7z2FgMffZLmTdP4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "751949838675-ajufjvafc4qk0l95jjhidi9djtiid23o.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -14,4 +14,9 @@
     <string name="already_has_an_account_n_sign_in">Already has an account? \n sign in</string>
     <string name="sign_in">Sign In</string>
     <string name="do_not_has_account_sign_in">Do not has account?\n Sign In</string>
+    <string name="nawaraj">Nawaraj</string>
+    <string name="user_image">user image</string>
+    <string name="status">Status</string>
+    <string name="record">RECORD</string>
+    <string name="sign_out">SIGN OUT</string>
 </resources>
