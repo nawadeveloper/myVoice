@@ -1,18 +1,23 @@
 package np.com.nawarajbista.myvoice
 
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.view.WindowManager
+import android.view.inputmethod.InputMethodManager
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.ActionBar
+import androidx.appcompat.app.AlertDialog
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_sign_up.*
 
 class SignUpActivity : AppCompatActivity() {
 
     lateinit var auth: FirebaseAuth
-
+    lateinit var dialog: AlertDialog
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sign_up)
@@ -37,22 +42,31 @@ class SignUpActivity : AppCompatActivity() {
     fun registerUser(view: View) {
         val email = edittext_create_account_email.text.toString()
         val password = edittext_create_account_password.text.toString()
-        val re_password = edittext_create_account_re_password.text.toString()
+        val rePassword = edittext_create_account_re_password.text.toString()
 
-        if(email.isEmpty() || password.isEmpty() || re_password.isEmpty()) {
+
+
+        if(email.isEmpty() || password.isEmpty() || rePassword.isEmpty()) {
             Toast.makeText(this, "fill all empty form", Toast.LENGTH_SHORT).show()
             return
         }
 
-        if(password != re_password) {
+        if(password != rePassword) {
             Toast.makeText(this, "Your password does not match.", Toast.LENGTH_SHORT).show()
             return
         }
 
 
+        hideKeyboard()
+
+        loading()
+
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener {
-                if(!it.isSuccessful) return@addOnCompleteListener
+                if(!it.isSuccessful) {
+                    dialog.dismiss()
+                    return@addOnCompleteListener
+                }
                 val intent = Intent(this, MainActivity::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
                 startActivity(intent)
@@ -70,5 +84,30 @@ class SignUpActivity : AppCompatActivity() {
     fun goToSignIn(view: View) {
         val intent = Intent(this, SignInActivity::class.java)
         startActivity(intent)
+    }
+
+    private fun loading() {
+        val builder = AlertDialog.Builder(this)
+        val dialogView = layoutInflater.inflate(R.layout.alert_dialog,null)
+        val dialogMessage = dialogView.findViewById<TextView>(R.id.dialog_message)
+        dialogMessage.text = getString(R.string.registration_in_process)
+
+        builder.setView(dialogView)
+        builder.setCancelable(false)
+        dialog = builder.create()
+        dialog.show()
+    }
+
+    private fun hideKeyboard() {
+        val currentView = this.currentFocus
+
+        if(currentView != null) {
+            val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(currentView.windowToken, 0)
+
+
+            //window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN)
+
+        }
     }
 }

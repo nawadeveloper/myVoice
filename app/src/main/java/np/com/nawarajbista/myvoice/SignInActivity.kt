@@ -1,10 +1,14 @@
 package np.com.nawarajbista.myvoice
 
 import android.app.AlertDialog
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
+import android.view.WindowManager
+import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
@@ -42,6 +46,13 @@ class SignInActivity : AppCompatActivity() {
         if(email.isEmpty() || password.isEmpty()) {
             Toast.makeText(this, "provide all information.", Toast.LENGTH_SHORT).show()
             return
+        }
+
+        val currentView = this.currentFocus
+
+        if(currentView != null) {
+            val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(currentView.windowToken, 0)
         }
 
         loading()

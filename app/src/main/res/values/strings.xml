@@ -21,4 +21,6 @@
     <string name="sign_out">SIGN OUT</string>
     <string name="message">message</string>
     <string name="logging">Logging...</string>
+    <string name="registration_in_process">Registration in process</string>
+    <string name="does_not_have_account_register">Does not have account? \n Register</string>
 </resources>
