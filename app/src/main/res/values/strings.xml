@@ -23,4 +23,5 @@
     <string name="logging">Logging...</string>
     <string name="registration_in_process">Registration in process</string>
     <string name="does_not_have_account_register">Does not have account? \n Register</string>
+    <string name="full_name">Full Name</string>
 </resources>
