@@ -2,6 +2,7 @@ package np.com.nawarajbista.myvoice
 
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -11,8 +12,10 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat.getSystemService
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.activity_sign_up.*
 
 class SignUpActivity : AppCompatActivity() {
@@ -67,6 +70,8 @@ class SignUpActivity : AppCompatActivity() {
 
         loading()
 
+
+
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener {
                 if(!it.isSuccessful) {
@@ -98,31 +103,39 @@ class SignUpActivity : AppCompatActivity() {
     }
 
 
+
     private fun storeDataToDatabase() {
 
         val uid = FirebaseAuth.getInstance().uid ?: ""
         val ref = FirebaseDatabase.getInstance().getReference("/users/$uid")
 
+
+        val defaultProfilePicture = "https://firebasestorage.googleapis.com/v0/b/my-voice-prototype.appspot.com/o/user_profile_image%2Fprofile_default_image.png?alt=media&token=beee1a6a-2c77-49bf-8732-19a0acdd85b2"
+
         val userData = UserDataFireBase(
             fullName,
-            email
+            email,
+            defaultProfilePicture
         )
 
         ref.setValue(userData)
-            .addOnCompleteListener {
+            .addOnCompleteListener {task ->
 
-                if(!it.isSuccessful) return@addOnCompleteListener
-
+                if(!task.isSuccessful) return@addOnCompleteListener
                 Log.d("success", "user data base created")
 
                 goToMainActivity()
             }
-            .addOnFailureListener {
-                Log.d("error", "${it.message}")
-                Toast.makeText(this, "${it.message}", Toast.LENGTH_SHORT).show()
+
+            .addOnFailureListener {failureMessage ->
+                Log.d("error", "${failureMessage.message}")
+                Toast.makeText(this, "${failureMessage.message}", Toast.LENGTH_SHORT).show()
                 auth.currentUser?.delete()
                 return@addOnFailureListener
             }
+
+
+
     }
 
     private fun loading() {
