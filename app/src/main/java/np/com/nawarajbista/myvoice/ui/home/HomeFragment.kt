@@ -1,11 +1,17 @@
 package np.com.nawarajbista.myvoice.ui.home
 
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.*
+import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.fragment_home.*
 import np.com.nawarajbista.myvoice.R
+import np.com.nawarajbista.myvoice.UserDataFireBase
 
 class HomeFragment : Fragment() {
 
@@ -23,6 +29,45 @@ class HomeFragment : Fragment() {
         homeViewModel.text.observe(this, Observer {
 //            textView.text = it
         })
+
+
+        getUserData()
+
         return root
     }
+
+    private fun getUserData() {
+
+        val currentUser = FirebaseAuth.getInstance().currentUser?.uid
+        val ref = FirebaseDatabase.getInstance().reference.child("/users")
+
+        var user: UserDataFireBase?
+
+        ref.addValueEventListener(object: ValueEventListener {
+            override fun onCancelled(p0: DatabaseError) {
+
+            }
+
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+
+                for(snapshot in dataSnapshot.children) {
+                    user = snapshot.getValue(UserDataFireBase::class.java)
+//                    Log.d("username", snapshot.value.toString())
+
+
+                    if(user != null) {
+                        Picasso.get().load(user?.defaultProfilePicture).into(image_user)
+                        textview_user_name.text = user?.fullName.toString()
+                    }
+
+                }
+
+
+
+            }
+
+        })
+
+    }
+
 }
