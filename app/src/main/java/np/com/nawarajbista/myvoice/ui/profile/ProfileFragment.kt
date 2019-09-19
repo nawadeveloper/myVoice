@@ -28,9 +28,9 @@ class ProfileFragment : Fragment() {
         profileViewModel =
             ViewModelProviders.of(this).get(ProfileViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_profile, container, false)
-        val textView: TextView = root.findViewById(R.id.profile)
+        //val textView: TextView = root.findViewById(R.id.profile)
         profileViewModel.text.observe(this, Observer {
-            textView.text = it
+            //textView.text = it
         })
 
         return root
@@ -50,5 +50,8 @@ class ProfileFragment : Fragment() {
         }
 
     }
+
+
+
 
 }

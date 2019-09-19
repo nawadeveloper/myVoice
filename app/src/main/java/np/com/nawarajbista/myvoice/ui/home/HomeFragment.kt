@@ -38,10 +38,10 @@ class HomeFragment : Fragment() {
 
     private fun getUserData() {
 
+        var user: UserDataFireBase? = null
         val currentUser = FirebaseAuth.getInstance().currentUser?.uid
-        val ref = FirebaseDatabase.getInstance().reference.child("/users")
+        val ref = FirebaseDatabase.getInstance().reference.child("/users/$currentUser")
 
-        var user: UserDataFireBase?
 
         ref.addValueEventListener(object: ValueEventListener {
             override fun onCancelled(p0: DatabaseError) {
@@ -50,23 +50,17 @@ class HomeFragment : Fragment() {
 
             override fun onDataChange(dataSnapshot: DataSnapshot) {
 
-                for(snapshot in dataSnapshot.children) {
-                    user = snapshot.getValue(UserDataFireBase::class.java)
-//                    Log.d("username", snapshot.value.toString())
+                user = dataSnapshot.getValue(UserDataFireBase::class.java)
 
-
-                    if(user != null) {
-                        Picasso.get().load(user?.defaultProfilePicture).into(image_user)
-                        textview_user_name.text = user?.fullName.toString()
-                    }
-
-                }
-
+                Picasso.get().load(user?.defaultProfilePicture).into(image_user)
+                textview_user_name.text = user?.fullName
 
 
             }
-
         })
+
+
+
 
     }
 

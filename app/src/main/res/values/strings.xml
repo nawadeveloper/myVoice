@@ -24,4 +24,9 @@
     <string name="registration_in_process">Registration in process</string>
     <string name="does_not_have_account_register">Does not have account? \n Register</string>
     <string name="full_name">Full Name</string>
+    <string name="change_profile_image">change profile image</string>
+    <string name="sign_out_small_letter">sign out</string>
+    <string name="name">name</string>
+    <string name="edit_icon">edit icon</string>
+    <string name="username_gmail_com">username@gmail.com</string>
 </resources>
