@@ -6,9 +6,12 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.*
 
 
 class MainActivity : AppCompatActivity() {
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,5 +26,12 @@ class MainActivity : AppCompatActivity() {
         supportActionBar?.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
         supportActionBar?.setCustomView(R.layout.action_bar)
 
+    }
+
+    public fun getUserData(): DatabaseReference {
+
+        val currentUser = FirebaseAuth.getInstance().currentUser?.uid
+
+        return FirebaseDatabase.getInstance().reference.child("/users/$currentUser")
     }
 }

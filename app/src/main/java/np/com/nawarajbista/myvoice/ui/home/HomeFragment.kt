@@ -10,8 +10,10 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_home.*
+import np.com.nawarajbista.myvoice.MainActivity
 import np.com.nawarajbista.myvoice.R
 import np.com.nawarajbista.myvoice.UserDataFireBase
+import java.lang.Exception
 
 class HomeFragment : Fragment() {
 
@@ -31,16 +33,8 @@ class HomeFragment : Fragment() {
         })
 
 
-        getUserData()
-
-        return root
-    }
-
-    private fun getUserData() {
-
-        var user: UserDataFireBase? = null
-        val currentUser = FirebaseAuth.getInstance().currentUser?.uid
-        val ref = FirebaseDatabase.getInstance().reference.child("/users/$currentUser")
+        val myActivity = activity as MainActivity
+        val ref = myActivity.getUserData()
 
 
         ref.addValueEventListener(object: ValueEventListener {
@@ -50,11 +44,15 @@ class HomeFragment : Fragment() {
 
             override fun onDataChange(dataSnapshot: DataSnapshot) {
 
-                user = dataSnapshot.getValue(UserDataFireBase::class.java)
+                val user = dataSnapshot.getValue(UserDataFireBase::class.java)
 
-                Picasso.get().load(user?.defaultProfilePicture).into(image_user)
-                textview_user_name.text = user?.fullName
+                try {
+                    Picasso.get().load(user?.defaultProfilePicture).into(image_user)
+                    textview_user_name.text = user?.fullName
 
+                } catch (e: Exception) {
+                    Log.d("homeFragment", "${e.message}")
+                }
 
             }
         })
@@ -62,6 +60,10 @@ class HomeFragment : Fragment() {
 
 
 
+
+        return root
     }
+
+
 
 }
