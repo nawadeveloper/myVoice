@@ -24,7 +24,7 @@ import np.com.nawarajbista.myvoice.MainActivity
 import np.com.nawarajbista.myvoice.R
 import np.com.nawarajbista.myvoice.SignInActivity
 import np.com.nawarajbista.myvoice.UserDataFireBase
-
+import java.util.*
 
 
 class ProfileFragment : Fragment() {
@@ -124,8 +124,10 @@ class ProfileFragment : Fragment() {
             return
         }
 
+        val fileName = UUID.randomUUID().toString()
+
         val userID = FirebaseAuth.getInstance().currentUser?.uid
-        val storageRef = FirebaseStorage.getInstance().getReference("/user_profile_image/$userID")
+        val storageRef = FirebaseStorage.getInstance().getReference("/user_profile_image/$userID/$fileName")
 
         storageRef.putFile(selectedPhotoURI!!)
             .addOnSuccessListener {
@@ -152,6 +154,11 @@ class ProfileFragment : Fragment() {
             .addOnFailureListener {
                 Log.d("ProfileFragment", "${it.message}")
             }
+
+        val photoID = UUID.randomUUID().toString()
+
+        ref.child("photos/$photoID").setValue(imagePath)
+
     }
 
 
