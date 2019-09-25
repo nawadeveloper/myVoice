@@ -29,4 +29,5 @@
     <string name="name">name</string>
     <string name="edit_icon">edit icon</string>
     <string name="username_gmail_com">username@gmail.com</string>
+    <string name="update">update</string>
 </resources>

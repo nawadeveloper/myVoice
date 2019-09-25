@@ -1,7 +1,6 @@
 package np.com.nawarajbista.myvoice.ui.profile
 
 import android.app.Activity
-import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -11,7 +10,10 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.isInvisible
+import android.view.WindowManager
+import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -24,6 +26,7 @@ import np.com.nawarajbista.myvoice.MainActivity
 import np.com.nawarajbista.myvoice.R
 import np.com.nawarajbista.myvoice.SignInActivity
 import np.com.nawarajbista.myvoice.UserDataFireBase
+import java.lang.Exception
 import java.util.*
 
 
@@ -59,10 +62,17 @@ class ProfileFragment : Fragment() {
 
             override fun onDataChange(dataSnapshot: DataSnapshot) {
 
-                val user = dataSnapshot.getValue(UserDataFireBase::class.java)
-                Picasso.get().load(user?.defaultProfilePicture).into(profile_image)
-                user_name.text = user?.fullName
-                user_email.text = user?.email
+                try {
+
+                    val user = dataSnapshot.getValue(UserDataFireBase::class.java)
+                    Picasso.get().load(user?.defaultProfilePicture).into(profile_image)
+                    user_name.text = user?.fullName
+                    user_email.text = user?.email
+                }
+
+                catch (e: Exception) {
+                    Log.d("ProfileFragmentError", e.message)
+                }
 
             }
         })
@@ -72,6 +82,12 @@ class ProfileFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        activity?.window?.
+            setSoftInputMode(
+                WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE or WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN
+            )
+
 
         auth = FirebaseAuth.getInstance()
 
@@ -89,10 +105,15 @@ class ProfileFragment : Fragment() {
         }
 
         edit_user_name.setOnClickListener {
-            user_name.visibility = View.GONE
+            editMode("show")
+        }
+
+        button_update_user_name.setOnClickListener {
+            updateNameToDatabase()
         }
 
     }
+
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -107,6 +128,58 @@ class ProfileFragment : Fragment() {
 
 
         }
+    }
+
+    private fun editMode(show: String) {
+
+        if(show == "show") {
+            val currentUserName = user_name.text.toString()
+
+            user_name.visibility = View.GONE
+            edit_user_name.visibility = View.GONE
+            edittext_user_name.visibility = View.VISIBLE
+            button_update_user_name.visibility = View.VISIBLE
+
+
+            edittext_user_name.setText(currentUserName)
+        }
+        else {
+            user_name.visibility = View.VISIBLE
+            edit_user_name.visibility = View.VISIBLE
+            edittext_user_name.visibility = View.GONE
+            button_update_user_name.visibility = View.GONE
+        }
+    }
+
+    private fun updateNameToDatabase() {
+        val updatedName = edittext_user_name.text.toString()
+        if(updatedName.isEmpty()) {
+            Toast.makeText(context, "give some name to update", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        val newName = edittext_user_name.text.toString()
+        val newData = mapOf("fullName" to newName)
+
+        ref.updateChildren(newData)
+            .addOnSuccessListener {
+
+                hideKeyboard()
+                editMode("hide")
+
+            }
+            .addOnFailureListener {
+                Toast.makeText(context, "${it.message}", Toast.LENGTH_SHORT).show()
+            }
+
+
+    }
+
+    private fun hideKeyboard() {
+        val currentView = activity?.currentFocus
+        val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(currentView?.windowToken, 0)
+
     }
 
     private fun getImageFromDevice() {
