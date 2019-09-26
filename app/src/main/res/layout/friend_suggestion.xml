@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    android:layout_marginBottom="0dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp">
+
+        <ImageView
+            android:id="@+id/image_view_suggestion"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:contentDescription="@string/user_image"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/textview_suggestion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toEndOf="@+id/image_view_suggestion"
+            app:layout_constraintTop_toTopOf="@+id/image_view_suggestion"
+            app:layout_constraintBottom_toBottomOf="@+id/image_view_suggestion"
+            android:layout_marginStart="16dp"
+            android:textSize="24sp"
+            android:text="@string/edit_icon"/>
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/button_send_request"
+            style="@style/button_light_green"
+            android:text="@string/add_friend"
+            app:layout_constraintTop_toBottomOf="@+id/image_view_suggestion"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/button_ignore"
+            />
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/button_ignore"
+            style="@style/button_dark_green"
+            android:text="@string/ignore"
+            app:layout_constraintTop_toTopOf="@+id/button_send_request"
+            app:layout_constraintBottom_toBottomOf="@+id/button_send_request"
+            app:layout_constraintStart_toEndOf="@id/button_send_request"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>
