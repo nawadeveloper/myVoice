@@ -6,9 +6,10 @@ import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.squareup.picasso.Picasso
+import com.xwray.groupie.GroupAdapter
+import com.xwray.groupie.GroupieViewHolder
 import kotlinx.android.synthetic.main.fragment_home.*
 import np.com.nawarajbista.myvoice.MainActivity
 import np.com.nawarajbista.myvoice.R
@@ -63,6 +64,7 @@ class HomeFragment : Fragment() {
 
         return root
     }
+
 
 
 
