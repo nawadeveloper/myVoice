@@ -13,8 +13,7 @@ import kotlinx.android.synthetic.main.friend_suggestion.view.*
 
 
 class FriendSuggestion(
-    private val fullName: String,
-    private val image: String,
+    private val userDataFireBase: UserDataFireBase?,
     private val friendId: String): Item<GroupieViewHolder>() {
 
 
@@ -26,12 +25,12 @@ class FriendSuggestion(
 
         try {
 
-            Picasso.get().load(image).into(viewHolder.itemView.image_view_suggestion)
+            Picasso.get().load(userDataFireBase?.defaultProfilePicture).into(viewHolder.itemView.image_view_suggestion)
         }
         catch (e: Exception) {
             Log.d("FSError", e.message)
         }
-        viewHolder.itemView.textview_suggestion.text = fullName
+        viewHolder.itemView.textview_suggestion.text = userDataFireBase?.fullName
 
         viewHolder.itemView.button_send_request.setOnClickListener {
 
@@ -41,6 +40,9 @@ class FriendSuggestion(
         }
 
     }
+
+
+
 
     override fun getLayout(): Int {
 
@@ -60,7 +62,4 @@ class FriendSuggestion(
         //to push multiple value create class and pass the value to setValue
         userDataFireBase.child("requestReceivedFrom").push().setValue(currentUser)
     }
-
-
-
 }

@@ -32,4 +32,7 @@
     <string name="update">update</string>
     <string name="add_friend">add friend</string>
     <string name="ignore">ignore</string>
+    <string name="friend_suggestion">Friend Suggestion</string>
+    <string name="accept">Accept</string>
+    <string name="friend_request">Friend Request</string>
 </resources>
