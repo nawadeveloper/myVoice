@@ -1,5 +1,10 @@
 package np.com.nawarajbista.myvoice
 
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.squareup.picasso.Picasso
 import com.xwray.groupie.GroupieViewHolder
 import com.xwray.groupie.Item
@@ -18,6 +23,7 @@ class FriendRequest(
         viewHolder.itemView.button_accept.setOnClickListener {
             friendRequestAccepted()
         }
+
     }
 
     override fun getLayout(): Int {
@@ -26,16 +32,58 @@ class FriendRequest(
 
 
     private fun friendRequestAccepted() {
+        val currentUser = FirebaseAuth.getInstance().currentUser?.uid
 
         //on user side
         //remove data from requestReceivedFrom
         //add data to friendList
+        addFriendToUser(currentUser)
 
 
         //on friend side
         //remove data from requestSendTo
         //add data to friendList
+        addFriendToSender(currentUser)
+    }
 
-        TODO("start here")
+
+    private fun addFriendToUser(user: String?) {
+        val dbRef = FirebaseDatabase.getInstance().getReference("users/$user")
+
+        dbRef.child("friendList/$friendId").setValue("friend")
+
+        dbRef.child("requestReceivedFrom").orderByValue().equalTo(friendId).addValueEventListener(object : ValueEventListener{
+            override fun onCancelled(p0: DatabaseError) {
+
+            }
+
+            override fun onDataChange(p0: DataSnapshot) {
+                for (snap in p0.children) {
+                    dbRef.child("requestReceivedFrom/${snap.key}").removeValue()
+                }
+            }
+        })
+    }
+
+    private fun addFriendToSender(user: String?) {
+        val dbRef = FirebaseDatabase.getInstance().getReference("users/$friendId")
+
+        dbRef.child("friendList/$user").setValue("friend")
+
+        dbRef.child("requestSendTo").orderByValue().equalTo(user)
+            .addValueEventListener(object: ValueEventListener{
+                override fun onCancelled(p0: DatabaseError) {
+
+                }
+
+                override fun onDataChange(p0: DataSnapshot) {
+                    for(snap in p0.children) {
+                        dbRef.child("requestSendTo/${snap.key}").removeValue()
+                    }
+                }
+            })
+
+
+
     }
 }

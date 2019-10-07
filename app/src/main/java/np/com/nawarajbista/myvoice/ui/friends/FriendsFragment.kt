@@ -52,11 +52,16 @@ class FriendsFragment : Fragment() {
 
 
         ref.child("$currentUser").addValueEventListener(object : ValueEventListener {
+
             override fun onCancelled(p0: DatabaseError) {
                 Toast.makeText(context, p0.message, Toast.LENGTH_SHORT).show()
             }
 
             override fun onDataChange(p0: DataSnapshot) {
+
+                alreadyRequested.clear()
+                requestReceivedFrom.clear()
+
 
                 val removeFromSuggestionList = p0.getValue(AlreadyRequested::class.java)
 
@@ -72,8 +77,15 @@ class FriendsFragment : Fragment() {
                     alreadyRequested.add("${it.value}")
                     requestReceivedFrom.add("${it.value}")
                 }
+
+                p0.child("friendList").children.forEach {
+                    alreadyRequested.add("${it.key}")
+                }
+
             }
         })
+
+
 
 
         ref.addValueEventListener(object : ValueEventListener {
@@ -83,7 +95,7 @@ class FriendsFragment : Fragment() {
             }
 
             override fun onDataChange(p0: DataSnapshot) {
-
+                requestAdaptor.clear()
                 suggestionAdaptor.clear()
 
                 for (snap in p0.children) {
@@ -112,11 +124,29 @@ class FriendsFragment : Fragment() {
                 }
 
                 if(suggestionAdaptor.itemCount != 0) {
-                    textview_suggestion_title.visibility = view.visibility
+                    if(textview_request_title != null) {
+
+                        textview_suggestion_title.visibility = View.VISIBLE
+                    }
+                }
+                else {
+                    if(textview_request_title != null) {
+
+                        textview_suggestion_title.visibility = View.GONE
+                    }
                 }
 
                 if(requestAdaptor.itemCount != 0) {
-                    textview_request_title.visibility = view.visibility
+                    if(textview_request_title != null) {
+
+                        textview_request_title.visibility = View.VISIBLE
+                    }
+                }
+                else {
+                    if(textview_request_title != null) {
+
+                        textview_request_title.visibility = View.GONE
+                    }
                 }
             }
         })
@@ -124,5 +154,6 @@ class FriendsFragment : Fragment() {
 
         recyclerview_friend_request.adapter = requestAdaptor
         recyclerview_friend_suggestion.adapter = suggestionAdaptor
+
     }
 }
