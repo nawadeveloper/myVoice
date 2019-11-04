@@ -35,4 +35,6 @@
     <string name="friend_suggestion">Friend Suggestion</string>
     <string name="accept">Accept</string>
     <string name="friend_request">Friend Request</string>
+    <string name="nov_2_2019">Nov 2, 2019</string>
+    <string name="this_is_my_status">This is my status.</string>
 </resources>

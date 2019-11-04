@@ -10,11 +10,11 @@ import androidx.lifecycle.ViewModelProviders
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.squareup.picasso.Picasso
+import com.xwray.groupie.GroupAdapter
+import com.xwray.groupie.GroupieViewHolder
 import kotlinx.android.synthetic.main.fragment_home.*
-import np.com.nawarajbista.myvoice.MainActivity
-import np.com.nawarajbista.myvoice.Post
+import np.com.nawarajbista.myvoice.*
 import np.com.nawarajbista.myvoice.R
-import np.com.nawarajbista.myvoice.UserDataFireBase
 import java.lang.Exception
 import java.text.Format
 import java.text.SimpleDateFormat
@@ -66,9 +66,6 @@ class HomeFragment : Fragment() {
         })
 
 
-
-
-
         return root
     }
 
@@ -76,8 +73,60 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
+        val adaptor = GroupAdapter<GroupieViewHolder>()
+        val userFriendList = arrayListOf<String>()
+
+        val currentUser = FirebaseAuth.getInstance().currentUser?.uid
+        val userRef = FirebaseDatabase.getInstance().getReference("users/$currentUser")
+
+        userRef.addValueEventListener(object: ValueEventListener {
+            override fun onCancelled(p0: DatabaseError) {
+                Log.d("HomeFragment", p0.message)
+            }
+
+            override fun onDataChange(userData: DataSnapshot) {
+
+                adaptor.clear()
+                userFriendList.clear()
+
+                val userInformation = userData.getValue(UserInformation::class.java)
+
+                userInformation?.friendList?.forEach {
+                    userFriendList.add(it.key)
+                }
+
+            }
+        })
+
+        val FBref = FirebaseDatabase.getInstance().getReference("users")
+
+        FBref.addValueEventListener(object: ValueEventListener{
+            override fun onCancelled(p0: DatabaseError) {
+
+            }
+
+            override fun onDataChange(p0: DataSnapshot) {
+
+                adaptor.clear()
+
+                userFriendList.forEach {
+                    val dataForPostDisplay = p0.child(it).getValue(UserInformation::class.java)
+
+                    if(dataForPostDisplay?.post!!.isNotEmpty()) {
+
+                        adaptor.add(Status(dataForPostDisplay))
+                    }
+                }
+            }
+        })
+
+        recyclerview_home.adapter = adaptor
+
+
+
+
         button_record.setOnClickListener {
-            val currentUser = FirebaseAuth.getInstance().currentUser?.uid
             val dbRef = FirebaseDatabase.getInstance().getReference("/users/$currentUser")
 
             val status = edittext_status.text.toString()
@@ -87,16 +136,18 @@ class HomeFragment : Fragment() {
 
 
             if(status.isNotEmpty()) {
-                val post = Post(currentDate, status)
-                val reference = dbRef.child("post").push()
+//                val post = Post(currentDate, status)
+                val reference = dbRef.child("post/$currentDate")
 
-                reference.setValue(post)
+                reference.setValue(status)
+                    .addOnCompleteListener {
+                        Toast.makeText(context, "status added", Toast.LENGTH_SHORT).show()
+                        edittext_status.setText("")
+                    }
             }
             else {
                 Toast.makeText(context, "write some status.", Toast.LENGTH_SHORT).show()
             }
-
-
 
         }
     }
