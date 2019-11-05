@@ -41,31 +41,6 @@ class HomeFragment : Fragment() {
         })
 
 
-        val myActivity = activity as MainActivity
-        val ref = myActivity.getUserData()
-
-
-        ref.addValueEventListener(object: ValueEventListener {
-            override fun onCancelled(p0: DatabaseError) {
-
-            }
-
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-
-                val user = dataSnapshot.getValue(UserDataFireBase::class.java)
-
-                try {
-                    Picasso.get().load(user?.defaultProfilePicture).into(image_user)
-                    textview_user_name.text = user?.fullName
-
-                } catch (e: Exception) {
-                    Log.d("homeFragment", "${e.message}")
-                }
-
-            }
-        })
-
-
         return root
     }
 
@@ -80,6 +55,7 @@ class HomeFragment : Fragment() {
         val currentUser = FirebaseAuth.getInstance().currentUser?.uid
         val userRef = FirebaseDatabase.getInstance().getReference("users/$currentUser")
 
+        //get friend list of current user
         userRef.addValueEventListener(object: ValueEventListener {
             override fun onCancelled(p0: DatabaseError) {
                 Log.d("HomeFragment", p0.message)
@@ -96,11 +72,22 @@ class HomeFragment : Fragment() {
                     userFriendList.add(it.key)
                 }
 
+                //display user information on new post record section.
+                try {
+                    Picasso.get().load(userInformation?.defaultProfilePicture).into(image_user)
+                    textview_user_name.text = userInformation?.fullName
+
+                } catch (e: Exception) {
+                    Log.d("homeFragment", "${e.message}")
+                }
+
+
             }
         })
 
         val FBref = FirebaseDatabase.getInstance().getReference("users")
 
+        //get the post of friend from above friend list
         FBref.addValueEventListener(object: ValueEventListener{
             override fun onCancelled(p0: DatabaseError) {
 
@@ -115,7 +102,10 @@ class HomeFragment : Fragment() {
 
                     if(dataForPostDisplay?.post!!.isNotEmpty()) {
 
-                        adaptor.add(Status(dataForPostDisplay))
+                        dataForPostDisplay.post.forEach {post ->
+                            adaptor.add(Status(dataForPostDisplay, post.key, post.value))
+                        }
+
                     }
                 }
             }
@@ -136,7 +126,6 @@ class HomeFragment : Fragment() {
 
 
             if(status.isNotEmpty()) {
-//                val post = Post(currentDate, status)
                 val reference = dbRef.child("post/$currentDate")
 
                 reference.setValue(status)
@@ -151,8 +140,4 @@ class HomeFragment : Fragment() {
 
         }
     }
-
-
-
-
 }
