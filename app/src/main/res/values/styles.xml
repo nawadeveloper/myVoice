@@ -25,7 +25,16 @@
         <item name="android:layout_margin">16dp</item>
     </style>
 
+    <style name="button2" >
+        <item name="android:padding">8dp</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
     <style name="button_dark_green" parent="button">
+        <item name="android:background">@drawable/button_dark_green</item>
+    </style>
+
+    <style name="button_dark_green_2" parent="button2">
         <item name="android:background">@drawable/button_dark_green</item>
     </style>
 

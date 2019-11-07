@@ -4,7 +4,7 @@ data class UserInformation(
     val fullName: String?,
     val defaultProfilePicture: String?,
     val friendList: HashMap<String, String>,
-    val post: HashMap<String, String>
+    val post: HashMap<String, Post>
 ) {
     constructor(): this("", "", HashMap(), HashMap())
 }

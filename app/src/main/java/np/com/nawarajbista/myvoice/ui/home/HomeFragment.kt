@@ -85,10 +85,10 @@ class HomeFragment : Fragment() {
             }
         })
 
-        val FBref = FirebaseDatabase.getInstance().getReference("users")
+        val fbRef = FirebaseDatabase.getInstance().getReference("users")
 
         //get the post of friend from above friend list
-        FBref.addValueEventListener(object: ValueEventListener{
+        fbRef.addValueEventListener(object: ValueEventListener{
             override fun onCancelled(p0: DatabaseError) {
 
             }
@@ -103,13 +103,14 @@ class HomeFragment : Fragment() {
                     if(dataForPostDisplay?.post!!.isNotEmpty()) {
 
                         dataForPostDisplay.post.forEach {post ->
-                            adaptor.add(Status(dataForPostDisplay, post.key, post.value))
-                        }
 
+                            adaptor.add(Status(dataForPostDisplay, post))
+                        }
                     }
                 }
             }
         })
+
 
         recyclerview_home.adapter = adaptor
 
@@ -127,8 +128,9 @@ class HomeFragment : Fragment() {
 
             if(status.isNotEmpty()) {
                 val reference = dbRef.child("post/$currentDate")
+                val post = Post(status)
 
-                reference.setValue(status)
+                reference.setValue(post)
                     .addOnCompleteListener {
                         Toast.makeText(context, "status added", Toast.LENGTH_SHORT).show()
                         edittext_status.setText("")

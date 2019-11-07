@@ -24,7 +24,7 @@ class MainActivity : AppCompatActivity() {
 
         //action bar
         supportActionBar?.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
-        supportActionBar?.setCustomView(R.layout.action_bar)
+//        supportActionBar?.setCustomView(R.layout.action_bar)
 
     }
 
