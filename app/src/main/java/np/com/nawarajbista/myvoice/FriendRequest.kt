@@ -82,8 +82,5 @@ class FriendRequest(
                     }
                 }
             })
-
-
-
     }
 }

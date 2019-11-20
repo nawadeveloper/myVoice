@@ -115,7 +115,8 @@ class SignUpActivity : AppCompatActivity() {
         val userData = UserDataFireBase(
             fullName,
             email,
-            defaultProfilePicture
+            defaultProfilePicture,
+            uid
         )
 
         ref.setValue(userData)

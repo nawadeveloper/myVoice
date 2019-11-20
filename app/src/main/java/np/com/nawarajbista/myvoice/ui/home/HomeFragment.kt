@@ -21,6 +21,7 @@ import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.*
+import kotlin.collections.HashMap
 import kotlin.time.nanoseconds
 
 class HomeFragment : Fragment() {
@@ -128,6 +129,7 @@ class HomeFragment : Fragment() {
 
             if(status.isNotEmpty()) {
                 val reference = dbRef.child("post/$currentDate")
+
                 val post = Post(status)
 
                 reference.setValue(post)
