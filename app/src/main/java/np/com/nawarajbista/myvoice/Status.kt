@@ -10,7 +10,6 @@ import com.squareup.picasso.Picasso
 import com.xwray.groupie.GroupieViewHolder
 import com.xwray.groupie.Item
 import kotlinx.android.synthetic.main.status.view.*
-import java.lang.Exception
 
 class Status(
     private val userInformation: UserInformation?,
@@ -36,12 +35,8 @@ class Status(
         viewHolder.itemView.number_of_comment.text = numOfComment.toString().plus(" comments")
 
 
-        try {
-
-            checkLike(viewHolder)
-        }
-        catch (e: Exception) {
-            Log.d("Status", e.message)
+        if(checkCurrentUserLiked()) {
+            likedView(viewHolder.itemView.button_status_like)
         }
 
 
@@ -63,20 +58,41 @@ class Status(
         return currentPost.value.like.size
     }
 
+
+
+    private fun removeFromLikeList(viewHolder: GroupieViewHolder) {
+        val ref = FirebaseDatabase.getInstance()
+            .getReference("users/${userInformation?.uid}/post/${currentPost.key}/like")
+
+        ref.child(currentUser!!).removeValue()
+            .addOnFailureListener {
+                Log.d("Status", it.message)
+            }
+            .addOnCompleteListener {
+                unLikedView(viewHolder.itemView.button_status_like)
+            }
+
+    }
+
     private fun checkCurrentUserLiked(): Boolean {
 
         var userHasLike = false
 
         if(currentUser in currentPost.value.like) {
             userHasLike = true
+
         }
-
-
         return userHasLike
     }
 
-    private fun countComment(): Int? {
-        return currentPost.value.comment.size
+    private fun likedView(view: Button) {
+        view.text = "LIKED"
+        view.setTextColor(Color.parseColor("#524FDD"))
+    }
+
+    private fun unLikedView(view: Button) {
+        view.text = "LIKE"
+        view.setTextColor(Color.parseColor("#ffffff"))
     }
 
     private fun addToLikeList(viewHolder: GroupieViewHolder) {
@@ -89,39 +105,12 @@ class Status(
             }
 
             .addOnCompleteListener {
-                viewHolder.itemView.button_status_like.text = "Liked"
+                likedView(viewHolder.itemView.button_status_like)
             }
 
     }
 
-    private fun removeFromLikeList(viewHolder: GroupieViewHolder) {
-        val ref = FirebaseDatabase.getInstance()
-            .getReference("users/${userInformation?.uid}/post/${currentPost.key}/like")
-
-        ref.child(currentUser!!).removeValue()
-            .addOnFailureListener {
-                Log.d("Status", it.message)
-            }
-            .addOnCompleteListener {
-                viewHolder.itemView.button_status_like.text = "like"
-            }
-
-    }
-
-    private fun checkLike(viewHolder: GroupieViewHolder) {
-        val likeButton = viewHolder.itemView.button_status_like
-        currentPost.value.like.forEach {
-            if(currentUser == it.key) {
-
-                likedView(likeButton)
-
-                return
-            }
-        }
-    }
-
-    private fun likedView(view: Button) {
-        view.text = "LIKED"
-        view.setTextColor(Color.parseColor("#524FDD"))
+    private fun countComment(): Int? {
+        return currentPost.value.comment.size
     }
 }
