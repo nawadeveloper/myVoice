@@ -28,7 +28,7 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    public fun getUserData(): DatabaseReference {
+    fun getUserData(): DatabaseReference {
 
         val currentUser = FirebaseAuth.getInstance().currentUser?.uid
 

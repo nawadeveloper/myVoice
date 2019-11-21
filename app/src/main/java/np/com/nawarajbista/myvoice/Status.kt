@@ -1,9 +1,13 @@
 package np.com.nawarajbista.myvoice
 
 
+import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import android.util.Log
+import android.view.View
 import android.widget.Button
+import androidx.core.content.ContextCompat.startActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.squareup.picasso.Picasso
@@ -47,6 +51,12 @@ class Status(
             else {
                 addToLikeList(viewHolder)
             }
+        }
+
+        viewHolder.itemView.button_status_comment.setOnClickListener {
+            val context = viewHolder.itemView.context
+            val intent = Intent(context, CommentSection::class.java)
+            context.startActivity(intent)
         }
     }
 

@@ -9,12 +9,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".SignInActivity"
-            android:windowSoftInputMode="stateHidden|adjustResize"
-            />
-        <activity android:name=".SignUpActivity"
-            android:windowSoftInputMode="stateHidden|adjustResize"
-            >
+        <activity android:name=".CommentSection"></activity>
+        <activity
+            android:name=".SignInActivity"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name=".SignUpActivity"
+            android:windowSoftInputMode="stateHidden|adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -26,7 +27,7 @@
         <activity
             android:name=".MainActivity"
             android:label="MyVoice"
-            android:windowSoftInputMode="stateHidden|adjustResize"/>
+            android:windowSoftInputMode="stateHidden|adjustResize" />
     </application>
 
 </manifest>
