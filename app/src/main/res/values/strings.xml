@@ -38,8 +38,10 @@
     <string name="nov_2_2019">Nov 2, 2019</string>
     <string name="this_is_my_status">This is my status.</string>
     <string name="like">like</string>
+    <string name="liked">liked</string>
     <string name="comment">comment</string>
     <string name="_5_people_like_your_post">5 people like your post.</string>
     <string name="leave_your_comment">leave your comment</string>
     <string name="_3_comments_on_this_post">3 comments on this post</string>
+    <string name="comment_here">comment here</string>
 </resources>

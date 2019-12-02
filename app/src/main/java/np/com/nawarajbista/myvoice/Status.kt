@@ -1,13 +1,13 @@
 package np.com.nawarajbista.myvoice
 
 
-import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.util.Log
-import android.view.View
+import android.view.LayoutInflater
+import android.view.Window
 import android.widget.Button
-import androidx.core.content.ContextCompat.startActivity
+import android.widget.PopupWindow
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.squareup.picasso.Picasso
@@ -56,6 +56,9 @@ class Status(
         viewHolder.itemView.button_status_comment.setOnClickListener {
             val context = viewHolder.itemView.context
             val intent = Intent(context, CommentSection::class.java)
+            intent.putExtra("userInformation", userInformation)
+            intent.putExtra("postDate", currentPost.key)
+            intent.putExtra("post", currentPost.value)
             context.startActivity(intent)
         }
     }
@@ -96,13 +99,15 @@ class Status(
     }
 
     private fun likedView(view: Button) {
-        view.text = "LIKED"
-        view.setTextColor(Color.parseColor("#524FDD"))
+        view.text = view.context.getText(R.string.liked)
+        //view.setTextColor(Color.parseColor("#524FDD"))
+        view.setTextColor(view.context.getColor(R.color.colorBlue))
     }
 
     private fun unLikedView(view: Button) {
-        view.text = "LIKE"
-        view.setTextColor(Color.parseColor("#ffffff"))
+        view.text = view.context.getText(R.string.like)
+        //view.setTextColor(Color.parseColor("#ffffff"))
+        view.setTextColor(view.context.getColor(R.color.white))
     }
 
     private fun addToLikeList(viewHolder: GroupieViewHolder) {
