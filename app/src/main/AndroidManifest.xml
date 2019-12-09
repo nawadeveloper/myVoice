@@ -11,7 +11,12 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".CommentSection"
-            android:windowSoftInputMode="adjustResize" />
+            android:windowSoftInputMode="adjustResize" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity"/>
+
+        </activity>
 
         <activity
             android:name=".SignInActivity"

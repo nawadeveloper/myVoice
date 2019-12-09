@@ -9,7 +9,10 @@ import android.view.Window
 import android.widget.Button
 import android.widget.PopupWindow
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.squareup.picasso.Picasso
 import com.xwray.groupie.GroupieViewHolder
 import com.xwray.groupie.Item
@@ -77,13 +80,23 @@ class Status(
         val ref = FirebaseDatabase.getInstance()
             .getReference("users/${userInformation?.uid}/post/${currentPost.key}/like")
 
+            ref.addValueEventListener(object: ValueEventListener {
+                override fun onCancelled(p0: DatabaseError) {
+
+                }
+
+                override fun onDataChange(p0: DataSnapshot) {
+                    if(p0.hasChild(currentUser!!)) {
+                        likedView(viewHolder.itemView.button_status_like)
+                    }
+                    else {
+                        unLikedView(viewHolder.itemView.button_status_like)
+                    }
+
+                }
+            })
+
         ref.child(currentUser!!).removeValue()
-            .addOnFailureListener {
-                Log.d("Status", it.message)
-            }
-            .addOnCompleteListener {
-                unLikedView(viewHolder.itemView.button_status_like)
-            }
 
     }
 
