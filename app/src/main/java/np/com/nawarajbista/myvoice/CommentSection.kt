@@ -105,13 +105,12 @@ class CommentSection : AppCompatActivity() {
         val ref = FirebaseDatabase.getInstance()
             .getReference("users/$commenter")
 
-        ref.addValueEventListener(object: ValueEventListener{
+        ref.addListenerForSingleValueEvent(object: ValueEventListener {
             override fun onCancelled(p0: DatabaseError) {
 
             }
 
             override fun onDataChange(p0: DataSnapshot) {
-
                 val commentUserInformation = p0.getValue(JustUserInformation::class.java)
                 adapter.add(CommentData(commentUserInformation, commentDate, dataOfComment))
             }
